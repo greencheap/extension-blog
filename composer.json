@@ -1,9 +1,9 @@
 {
-    "name": "greencheap/extension-build",
+    "name": "greencheap/blog",
     "type": "greencheap-extension",
     "version": "1.0.0",
-    "title": "GreenCheap Build Extension",
-    "description": "GreenCheap paket build taslağı, bu taslak ile kurallara uygun paket oluşturabilirsiniz",
+    "title": "Blog Extension",
+    "description": "Kendinize Makaleler Yazabileceğiniz Esnek Bir Blog Yapısı",
     "license": "MIT",
     "authors": [
         {
