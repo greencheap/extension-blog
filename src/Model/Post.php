@@ -1,8 +1,7 @@
 <?php
-
 namespace GreenCheap\Blog\Model;
 
-use GreenCheap\Database\ORM\ModelTrait;
+use GreenCheap\Application as App;
 use GreenCheap\System\Model\DataModelTrait;
 use GreenCheap\System\Model\StatusModelTrait;
 use GreenCheap\User\Model\AccessModelTrait;
@@ -14,7 +13,7 @@ use GreenCheap\User\Model\AccessModelTrait;
  */
 class Post implements \JsonSerializable
 {
-    use ModelTrait, AccessModelTrait, DataModelTrait, StatusModelTrait;
+    use AccessModelTrait, DataModelTrait, StatusModelTrait, PostModelTrait;
 
     /**
      * @Column(type="integer")
@@ -63,15 +62,53 @@ class Post implements \JsonSerializable
     public $excerpt;
 
     /**
+     * @BelongsTo(targetEntity="GreenCheap\User\Model\User", keyFrom="user_id")
+     */
+    public $user;
+
+    /**
      * @var array
      */
-    protected static $properties = [];
+    protected static $properties = [
+        'author' => 'getAuthor',
+        'published' => 'isPublished',
+        'accessible' => 'isAccessible'
+    ];
+
+    /**
+     * @return null|string
+     */
+    public function getAuthor()
+    {
+        return $this->user ? $this->user->username : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->status === self::getStatus('STATUS_PUBLISHED') && $this->date < new \DateTime;
+    }
+
+    /**
+     * @param User|null $user
+     * @return bool
+     */
+    public function isAccessible(User $user = null)
+    {
+        return $this->isPublished() && $this->hasAccess($user ?: App::user());
+    }
 
     /**
      * @inheritDoc
      */
     public function jsonSerialize()
     {
-        return $this->toArray();
+        $data = [
+            'url' => App::url('@blog/id', ['id' => $this->id ?: 0], 'base')
+        ];
+
+        return $this->toArray($data);
     }
 }

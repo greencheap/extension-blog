@@ -1,4 +1,9 @@
 <?php
+
+use GreenCheap\Blog\Content\ReadmorePlugin;
+use GreenCheap\Blog\Event\PostListener;
+use GreenCheap\Blog\Event\RouteListener;
+
 return [
     'name' => 'blog',
 
@@ -32,7 +37,16 @@ return [
             'active' => '@blog/settings*',
             'access' => 'system: access settings'
         ]
+    ],
 
+    'nodes' => [
+        'blog' => [
+            'name' => '@blog',
+            'label' => 'Blog',
+            'controller' => 'GreenCheap\\Blog\\Controller\\SiteController',
+            'protected' => true,
+            'frontpage' => true
+        ]
     ],
 
     'routes' => [
@@ -43,8 +57,7 @@ return [
         '/api/blog' => [
             'name' => '@blog/api',
             'controller' => [
-                //'GreenCheap\\Blog\\Controller\\PostApiController',
-                //'GreenCheap\\Blog\\Controller\\CommentApiController'
+                'GreenCheap\\Blog\\Controller\\ApiPostController',
             ]
         ]
     ],
@@ -80,4 +93,32 @@ return [
         ]
     ],
 
+    'settings' => '@blog/settings',
+
+    'config' => [
+        'posts' => [
+            'posts_per_page' => 20,
+            'comments_enabled' => true,
+            'markdown_enabled' => true
+        ],
+        'permalink' => [
+            'type' => '',
+            'custom' => '{slug}'
+        ],
+        'feed' => [
+            'type' => 'rss2',
+            'limit' => 20
+        ],
+        'ck_node_single_id' => '10001'
+    ],
+
+    'events' => [
+        'boot' => function ($event, $app) {
+            $app->subscribe(
+                new RouteListener,
+                new PostListener(),
+                new ReadmorePlugin
+            );
+        },
+    ]
 ];

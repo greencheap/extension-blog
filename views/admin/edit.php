@@ -7,7 +7,7 @@
             <h2 class="uk-margin-remove" v-else>{{ 'Add' }}</h2>
         </div>
         <div class="uk-margin">
-            <a v-if="data.redirect" class="uk-button uk-button-text uk-margin-right" :href="$url.route(data.redirect)">{{ post.id ? 'Close' : 'Cancel' | trans }}</a>
+            <a class="uk-button uk-button-text uk-margin-right" :href="$url.route('admin/blog/post')">{{ post.id ? 'Close' : 'Cancel' | trans }}</a>
             <button class="uk-button uk-button-primary" type="submit">
                 {{ 'Save' | trans }}
             </button>

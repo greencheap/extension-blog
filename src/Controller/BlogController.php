@@ -35,16 +35,14 @@ class BlogController
      */
     public function postAction($filter = null, $page = null)
     {
-        return 'Hello World';
-
         return [
             '$view' => [
                 'title' => __('Posts'),
-                //'name'  => 'blog/admin/post-index.php'
+                'name'  => 'blog/admin/index.php'
             ],
             '$data' => [
-                'statuses' => Post::getStatuses(),
-                'authors'  => Post::getAuthors(),
+                'statuses' => StatusModelTrait::getStatuses(),
+                'authors'  => User::findAll(),
                 'canEditAll' => App::user()->hasAccess('blog: manage all posts'),
                 'config'   => [
                     'filter' => (object) $filter,
@@ -111,4 +109,19 @@ class BlogController
         ];
     }
 
+    /**
+     * @Access("system: access settings")
+     */
+    public function settingsAction()
+    {
+        return [
+            '$view' => [
+                'title' => __('Blog Settings'),
+                'name'  => 'blog/admin/settings.php'
+            ],
+            '$data' => [
+                'config' => App::module('blog')->config()
+            ]
+        ];
+    }
 }

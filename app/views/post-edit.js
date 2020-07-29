@@ -40,15 +40,15 @@ const post = {
 
     methods: {
         submit() {
-            this.$http.post('admin/api/post/save', {
+            this.$http.post('admin/api/blog/post', {
                 id: this.post.id,
                 data: this.post,
             }).then((res) => {
                 const response = res.data;
                 if (!this.post.id) {
-                    window.history.replaceState({}, '', this.$url.route('admin/post/edit', { id: response.query.id, type: response.query.type }));
+                    window.history.replaceState({}, '', this.$url.route('admin/blog/post/edit', { id: response.post.id, type: response.post.type }));
                 }
-                this.$set(this, 'post', response.query);
+                this.$set(this, 'post', response.post);
                 this.$notify(this.$trans('Saved'));
             }).catch((err) => {
                 this.$notify(err.data, 'danger');

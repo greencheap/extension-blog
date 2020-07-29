@@ -47,8 +47,11 @@
                     <input v-model="post.slug" type="text" class="uk-input uk-width-expand">
                 </div>
             </div>
-            
-            <categories-selector :type="type" v-model="post.categories_id"></categories-selector>
+
+            <div style="display:none" class="uk-margin uk-card uk-card-default uk-card-body uk-card-small">
+                <label class="uk-form-label">{{ 'Categories' | trans }}</label>
+                <v-categories v-model="post.categories_id" :categoriesId="post.categories_id" :category-type="type" :required="true"/>
+            </div>
 
             <div class="uk-margin">
                 <label class="uk-form-label">{{ 'Publish on' | trans }}</label>
@@ -93,7 +96,6 @@
 </template>
 
 <script>
-import CategoriesSelector from '../../../../../app/system/modules/categories/app/components/categories-selector.vue'
 export default {
     props:['post' , 'data'],
 
@@ -106,10 +108,6 @@ export default {
         return {
             type: 'blog'
         }
-    },
-
-    components: {
-        CategoriesSelector
     }
 }
 </script>
