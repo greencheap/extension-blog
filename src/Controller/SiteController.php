@@ -69,8 +69,8 @@ class SiteController
     }
 
     /**
-     * @Route("/feed")
-     * @Route("/feed/{type}")
+     * @Route("/feed" , defaults={"_maintenance"=true})
+     * @Route("/feed/{type}" , defaults={"_maintenance"=true})
      * @param string $type
      * @return
      */
