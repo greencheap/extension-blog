@@ -97,11 +97,13 @@ class SiteController
             return $query->where('roles IS NULL')->whereInSet('roles', App::user()->roles, false, 'OR');
         })->related('user')->limit($this->blog->config('feed.limit'))->orderBy('date', 'DESC')->get() as $post) {
             $url = App::url('@blog/id', ['id' => $post->id], 0);
+            $image = App::url()->getStatic($post->get('image.src'));
             $feed->addItem(
                 $feed->createItem([
                     'title' => $post->title,
                     'link' => $url,
-                    'description' => App::content()->applyPlugins($post->content, ['post' => $post, 'markdown' => $post->get('markdown'), 'readmore' => true]),
+                    'thumbnail' => $image,
+                    'description' => App::content()->applyPlugins($post->excerpt, ['post' => $post, 'markdown' => $post->get('markdown'), 'readmore' => true]),
                     'date' => $post->date,
                     'author' => [$post->user->name, $post->user->email],
                     'id' => $url
