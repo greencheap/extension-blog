@@ -100,7 +100,7 @@ export default {
     props:['post' , 'data'],
 
     section: {
-        lable: 'Settings',
+        label: 'Settings',
         priority: 0
     },
 

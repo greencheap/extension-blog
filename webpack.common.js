@@ -7,6 +7,9 @@ module.exports = {
         'post-edit':'./app/views/post-edit',
         'blog-settings':'./app/views/blog-settings',
         'post':'./app/views/post',
+        'link-blog': './app/components/link-blog.vue',
+        'post-meta': './app/components/post-meta.vue'
+
     },
     output: {
         path: path.resolve(__dirname, './app/bundle'),
