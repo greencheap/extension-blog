@@ -135,7 +135,7 @@ class ApiPostController
                 $post->id = null;
                 $post->status = Post::getStatus('STATUS_DRAFT');
                 $post->title = $post->title.' - '.__('Copy');
-                $post->date = new \DateTime();
+                $post->date = App::date()->date;
                 $post->save();
             }
         }

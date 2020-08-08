@@ -1,14 +1,14 @@
 {
     "name": "greencheap/blog",
     "type": "greencheap-extension",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "title": "Blog Extension",
     "description": "Kendinize Makaleler Yazabileceğiniz Esnek Bir Blog Yapısı",
     "license": "MIT",
     "authors": [
         {
             "name": "GreenCheap",
-            "email": "info@greencheap.net",
+            "email": "support@greencheap.net",
             "homepage": "http://greencheap.net"
         }
     ],

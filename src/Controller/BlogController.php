@@ -67,7 +67,7 @@ class BlogController
             }
 
             $query = Post::create([
-                'date' => new \DateTime,
+                'date' => App::date()->date,
                 'user_id' => App::user()->id,
                 'status' => StatusModelTrait::getStatus('STATUS_PUBLISHED')
             ]);
