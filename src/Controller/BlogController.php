@@ -66,11 +66,15 @@ class BlogController
                 return App::abort(404 , __('Not Found Post'));
             }
 
+            $module = App::module('blog');
+
             $query = Post::create([
                 'date' => App::date()->date,
                 'user_id' => App::user()->id,
                 'status' => StatusModelTrait::getStatus('STATUS_PUBLISHED')
             ]);
+
+            $query->set('markdown', $module->config('posts.markdown_enabled'));
         }
 
         $user = App::user();
