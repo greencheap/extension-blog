@@ -3,7 +3,6 @@ namespace GreenCheap\Blog\Controller;
 
 use GreenCheap\Application as App;
 use GreenCheap\Blog\Model\Post;
-use GreenCheap\Categories\Model\Categories;
 
 /**
  * @Access("blog: manage own posts || blog: manage all posts")
@@ -135,7 +134,7 @@ class ApiPostController
                 $post->id = null;
                 $post->status = Post::getStatus('STATUS_DRAFT');
                 $post->title = $post->title.' - '.__('Copy');
-                $post->date = App::date()->date;
+                $post->date = new \DateTime;
                 $post->save();
             }
         }

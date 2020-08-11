@@ -4,7 +4,6 @@ namespace GreenCheap\Blog\Controller;
 use GreenCheap\Application as App;
 use GreenCheap\Blog\Model\Post;
 use GreenCheap\Module\Module;
-use GreenCheap\View\Date;
 
 class SiteController
 {
@@ -14,17 +13,11 @@ class SiteController
     protected $blog;
     
     /**
-     * @var Date
-     */
-    protected Date $date;
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->blog = App::module('blog');
-        $this->date = new Date();
     }
 
     /**
@@ -35,7 +28,7 @@ class SiteController
      */
     public function indexAction( int $page = 1 )
     {
-        $query = Post::where(['status = ?', 'date < ?'], [Post::getStatus('STATUS_PUBLISHED'), App::date()->get()])->where(function ($query) {
+        $query = Post::query()->where(['status = :status', 'date < :date'], ['status' => Post::getStatus('STATUS_PUBLISHED'), 'date' => new \DateTime])->where(function ($query) {
             return $query->where('roles IS NULL')->whereInSet('roles', App::user()->roles, false, 'OR');
         })->related('user');
 
@@ -93,11 +86,11 @@ class SiteController
             'selfLink' => App::url('@blog/feed', [], 0)
         ]);
 
-        if ($last = Post::where(['status = ?', 'date < ?'], [Post::getStatus('STATUS_PUBLISHED'), App::date()->get()])->limit(1)->orderBy('modified', 'DESC')->first()) {
+        if ($last = Post::query()->where(['status = :status', 'date < :date'], ['status' => Post::getStatus('STATUS_PUBLISHED'), 'date' => new \DateTime])->limit(1)->orderBy('modified', 'DESC')->first()) {
             $feed->setDate($last->modified);
         }
 
-        foreach (Post::where(['status = ?', 'date < ?'], [Post::getStatus('STATUS_PUBLISHED'), App::date()->get()])->where(function ($query) {
+        foreach (Post::query()->where(['status = :status', 'date < :date'], ['status' => Post::getStatus('STATUS_PUBLISHED'), 'date' => new \DateTime])->where(function ($query) {
             return $query->where('roles IS NULL')->whereInSet('roles', App::user()->roles, false, 'OR');
         })->related('user')->limit($this->blog->config('feed.limit'))->orderBy('date', 'DESC')->get() as $post) {
             $url = App::url('@blog/id', ['id' => $post->id], 0);
@@ -127,7 +120,7 @@ class SiteController
      */
     public function postAction( int $id = 0 )
     {
-        if (!$post = Post::where(['id = ?', 'status = ?', 'date < ?'], [$id, Post::getStatus('STATUS_PUBLISHED'), App::date()->get()])->related('user')->first()) {
+        if (!$post = Post::query()->where(['id = :id', 'status = :status', 'date < :date'], ['id' => $id, 'status' => Post::getStatus('STATUS_PUBLISHED'), 'date' => new \DateTime])->related('user')->first()) {
             App::abort(404, __('Post not found!'));
         }
 
