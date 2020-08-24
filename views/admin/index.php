@@ -46,7 +46,6 @@
                         <span v-if="!canEditAll">{{ 'Author' | trans }}</span>
                         <input-filter :title="$trans('Author')" :value.sync="config.filter.author" :options="users" v-model="config.filter.author" v-else></input-filter>
                     </th>
-                    <th class="pk-table-width-100 uk-text-center">{{ 'Categories' | trans }}</th>
                     <th class="pk-table-width-100" v-order:date="config.filter.order">{{ 'Date' | trans }}</th>
                     <th class="pk-table-width-200 pk-table-min-width-200">{{ 'URL' | trans }}</th>
                 </tr>
@@ -68,9 +67,6 @@
                     </td>
                     <td>
                         <a :href="$url.route('admin/user/edit', { id: post.user_id })">{{ post.author }}</a>
-                    </td>
-                    <td class="uk-text-center">
-                        
                     </td>
                     <td class="pk-table-width-100">
                         {{ post.date | date }}
