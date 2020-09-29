@@ -3,7 +3,6 @@ namespace GreenCheap\Blog\Controller;
 
 use GreenCheap\Application as App;
 use GreenCheap\Blog\Model\Post;
-use GreenCheap\Categories\Service\CategoriesService;
 use GreenCheap\System\Model\StatusModelTrait;
 use GreenCheap\User\Model\Role;
 use GreenCheap\User\Model\User;
@@ -13,19 +12,6 @@ use GreenCheap\User\Model\User;
  */
 class BlogController
 {
-    /**
-     * @var CategoriesService
-     */
-    protected $categories;
-
-    /**
-     * BlogController constructor.
-     */
-    public function __construct()
-    {
-        $this->categories = new CategoriesService();
-    }
-
     /**
      * @Access("blog: manage own posts || blog: manage all posts")
      * @Request({"filter": "array", "page":"int"})
@@ -103,7 +89,6 @@ class BlogController
             '$data' => [
                 'post' => $query,
                 'data' => [
-                    'categories' => $this->categories->getAll('blog'),
                     'users' => User::findAll(),
                     'statuses' => StatusModelTrait::getStatuses(),
                     'roles'    => array_values(Role::findAll()),
