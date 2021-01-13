@@ -19,7 +19,7 @@ class BlogController
      * @param null $page
      * @return array[]
      */
-    public function postAction($filter = null, $page = null)
+    public function postAction($filter = null, $page = null): array
     {
         return [
             '$view' => [
@@ -45,7 +45,7 @@ class BlogController
      * @param int $id
      * @return array|void
      */
-    public function editAction($id = 0)
+    public function editAction($id = 0): array
     {
         if( !$query = Post::where(compact('id'))->first() ){
             if($id){
@@ -83,7 +83,7 @@ class BlogController
 
         return [
             '$view' => [
-                'title' => 'Hello',
+                'title' => $query->id ? __('Edit %title%' , ['%title%' => $query->title]) : __('New Post'),
                 'name' => 'blog:views/admin/edit.php'
             ],
             '$data' => [
@@ -101,7 +101,7 @@ class BlogController
     /**
      * @Access("system: access settings")
      */
-    public function settingsAction()
+    public function settingsAction(): array
     {
         return [
             '$view' => [

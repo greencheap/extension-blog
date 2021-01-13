@@ -30,6 +30,13 @@ return [
             'active' => '@blog/post*',
             'access' => 'blog: manage own posts || blog: manage all posts'
         ],
+        'blog: categories' => [
+            'label' => 'Categories',
+            'parent' => 'blog',
+            'url' => '@blog/admin/categories',
+            'active' => '@blog/admin/categories*',
+            'access' => 'blog: manage own posts || blog: manage all posts'
+        ],
         'blog: settings' => [
             'label' => 'Settings',
             'parent' => 'blog',
@@ -52,7 +59,10 @@ return [
     'routes' => [
         '/blog' => [
             'name' => '@blog',
-            'controller' => 'GreenCheap\\Blog\\Controller\\BlogController'
+            'controller' => [
+                'GreenCheap\\Blog\\Controller\\BlogController',
+                'GreenCheap\\Blog\\Controller\\CategoriesController'
+            ],
         ],
         '/api/blog' => [
             'name' => '@blog/api',

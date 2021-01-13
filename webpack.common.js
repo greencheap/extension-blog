@@ -3,10 +3,12 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        'post-index':'./app/views/post-index',
-        'post-edit':'./app/views/post-edit',
-        'blog-settings':'./app/views/blog-settings',
-        'post':'./app/views/post',
+        'post-index': './app/views/post-index',
+        'post-edit': './app/views/post-edit',
+        'categories-index': './app/views/categories-index',
+        'categories-edit': './app/views/categories-edit',
+        'blog-settings': './app/views/blog-settings',
+        'post': './app/views/post',
         'link-blog': './app/components/link-blog.vue',
         'post-meta': './app/components/post-meta.vue'
 
@@ -16,8 +18,7 @@ module.exports = {
         filename: '[name].js'
     },
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.vue$/,
                 loader: 'vue-loader'
             },

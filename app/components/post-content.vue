@@ -85,7 +85,7 @@
                     <p class="uk-margin-small">
                         <label><input v-model="post.data.markdown" class="uk-checkbox" type="checkbox" value="1"><span class="uk-margin-small-left">{{ 'Enable Markdown' | trans }}</span></label>
                     </p>
-                    <p class="uk-margin-small" style="display:none">
+                    <p class="uk-margin-small">
                         <label><input v-model="post.comment_status" class="uk-checkbox" type="checkbox" value="1"><span class="uk-margin-small-left">{{ 'Enable Comments' | trans }}</span></label>
                     </p>
                 </div>
