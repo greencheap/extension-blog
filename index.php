@@ -68,6 +68,7 @@ return [
             'name' => '@blog/api',
             'controller' => [
                 'GreenCheap\\Blog\\Controller\\ApiPostController',
+                'GreenCheap\\Blog\\Controller\\ApiCategoriesController',
             ]
         ]
     ],

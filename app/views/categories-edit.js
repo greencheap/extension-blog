@@ -38,6 +38,24 @@ const categories = {
         this.tab.show(this.active);
     },
 
+    methods: {
+        submit() {
+            this.$http.post('admin/api/blog/category', {
+                id: this.category.id,
+                data: this.category,
+            }).then((res) => {
+                const response = res.data;
+                if (!this.category.id) {
+                    window.history.replaceState({}, '', this.$url.route('admin/blog/categories/edit', { id: response.category.id, type: response.category.type }));
+                }
+                this.$set(this, 'category', response.category);
+                this.$notify(this.$trans('Saved'));
+            }).catch((err) => {
+                this.$notify(err.data, 'danger');
+            });
+        },
+    },
+
     components: {
         Section
     },

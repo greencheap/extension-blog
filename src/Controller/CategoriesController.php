@@ -1,13 +1,11 @@
 <?php
-
-
 namespace GreenCheap\Blog\Controller;
 
 use GreenCheap\Application as App;
 use GreenCheap\Blog\Model\Categories;
 use GreenCheap\System\Service\StatusModelService;
+use GreenCheap\User\Model\Role;
 use GreenCheap\User\Model\User;
-
 
 /**
  * Class CategoriesController
@@ -18,26 +16,26 @@ use GreenCheap\User\Model\User;
 class CategoriesController
 {
     /**
-     * @param array $filter
-     * @param int $page
+     * @param $filter
+     * @param $page
      * @return array|string
-     * @Request({"filter":"array" , "page":"int"})
+     * @Request({"filter":"array", "page":"int"})
      */
-    public function indexAction(array $filter = [] , int $page = 1): array|string
+    public function indexAction($filter = null, $page = null): array|string
     {
-        $db = App::db();
-
         return [
             '$view' => [
                 'title' => __('Categories'),
                 'name' => 'blog:views/admin/categories-index.php'
             ],
             '$data' => [
+                'authors'  => User::findAll(),
+                'canEditAll' => App::user()->hasAccess('blog: manage all posts'),
                 'config' => [
                     'filter' => (object) $filter,
                     'page' => (int) $page
                 ],
-
+                'statuses' => StatusModelService::getStatuses()
             ]
         ];
     }
@@ -49,6 +47,7 @@ class CategoriesController
      */
     public function editAction(int $id = 0): array
     {
+        $module = App::module('blog');
         if(!$query = Categories::where(compact('id'))->first()){
             if($id){
                 return App::abort(404 , __('Not Found Category'));
@@ -57,9 +56,29 @@ class CategoriesController
             $query = Categories::create([
                 'date' => new \DateTime(),
                 'user_id' => App::user()->id,
-                'status' => StatusModelService::getStatus('STATUS_DRAFT')
+                'status' => StatusModelService::getStatus('STATUS_PUBLISHED')
             ]);
+
+            $query->set('markdown', $module->config('posts.markdown_enabled'));
         }
+
+        $user = App::user();
+        if(!$user->hasAccess('blog: manage all posts') && $query->user_id !== $user->id) {
+            App::abort(403, __('Insufficient User Rights.'));
+        }
+
+        $roles = App::db()->createQueryBuilder()
+            ->from('@system_role')
+            ->where(['id' => Role::ROLE_ADMINISTRATOR])
+            ->whereInSet('permissions', ['blog: manage all posts', 'blog: manage own posts'], false, 'OR')
+            ->execute('id')
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $authors = App::db()->createQueryBuilder()
+            ->from('@system_user')
+            ->whereInSet('roles', $roles)
+            ->execute('id, username')
+            ->fetchAll();
 
         return [
             '$view' => [
@@ -67,7 +86,13 @@ class CategoriesController
                 'name' => 'blog:views/admin/categories-edit.php'
             ],
             '$data' => [
-                'category' => $query
+                'category' => $query,
+                'data' => [
+                    'users' => User::findAll(),
+                    'statuses' => StatusModelService::getStatuses(),
+                    'roles'    => array_values(Role::findAll()),
+                    'canEditAll' => $user->hasAccess('blog: manage all posts'),
+                ]
             ]
         ];
 

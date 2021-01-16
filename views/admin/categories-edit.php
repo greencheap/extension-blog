@@ -19,7 +19,7 @@
 
     <div ref="content" class="uk-switcher uk-margin" id="content">
         <div v-for="section in sections" :key="section.name">
-            <component :is="section.name" :category.sync="category"></component>
+            <component :is="section.name" :category.sync="category" :data.sync="data"></component>
         </div>
     </div>
 

@@ -3,7 +3,7 @@ namespace GreenCheap\Blog\Controller;
 
 use GreenCheap\Application as App;
 use GreenCheap\Blog\Model\Post;
-use GreenCheap\System\Model\StatusModelTrait;
+use GreenCheap\System\Service\StatusModelService;
 use GreenCheap\User\Model\Role;
 use GreenCheap\User\Model\User;
 
@@ -21,13 +21,23 @@ class BlogController
      */
     public function postAction($filter = null, $page = null): array
     {
+
+        $db = App::db();
+
+        $categories = $db->createQueryBuilder()
+        ->select(['id' , 'title'])
+        ->from('@blog_categories')
+        ->where('status = ?' , [StatusModelService::getStatus('STATUS_PUBLISHED')])
+        ->get();
+
         return [
             '$view' => [
                 'title' => __('Posts'),
                 'name'  => 'blog/admin/index.php'
             ],
             '$data' => [
-                'statuses' => StatusModelTrait::getStatuses(),
+                'statuses' => StatusModelService::getStatuses(),
+                'categories' => $categories,
                 'authors'  => User::findAll(),
                 'canEditAll' => App::user()->hasAccess('blog: manage all posts'),
                 'config'   => [
@@ -57,7 +67,7 @@ class BlogController
             $query = Post::create([
                 'date' => new \DateTime,
                 'user_id' => App::user()->id,
-                'status' => StatusModelTrait::getStatus('STATUS_PUBLISHED')
+                'status' => StatusModelService::getStatus('STATUS_PUBLISHED')
             ]);
 
             $query->set('markdown', $module->config('posts.markdown_enabled'));
@@ -81,6 +91,13 @@ class BlogController
             ->execute('id, username')
             ->fetchAll();
 
+        $categories = App::db()->createQueryBuilder()
+            ->select(['id', 'title'])
+            ->from('@blog_categories')
+            ->where('status = ?' , [StatusModelService::getStatus('STATUS_PUBLISHED')])
+            ->orderBy('title' , 'asc')
+            ->get();
+
         return [
             '$view' => [
                 'title' => $query->id ? __('Edit %title%' , ['%title%' => $query->title]) : __('New Post'),
@@ -90,9 +107,10 @@ class BlogController
                 'post' => $query,
                 'data' => [
                     'users' => User::findAll(),
-                    'statuses' => StatusModelTrait::getStatuses(),
+                    'statuses' => StatusModelService::getStatuses(),
                     'roles'    => array_values(Role::findAll()),
                     'canEditAll' => $user->hasAccess('blog: manage all posts'),
+                    'categories' => $categories
                 ]
             ]
         ];

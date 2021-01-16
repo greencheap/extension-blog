@@ -19,6 +19,10 @@ const post = {
             }
         });
         this.$set(this, 'sections', _.sortBy(sections, 'priority'));
+
+        if(!_.isArray(this.post.categories_id)){
+            this.post.categories_id = [];
+        }
     },
 
     mounted() {
@@ -40,6 +44,11 @@ const post = {
 
     methods: {
         submit() {
+            if(!this.post.categories_id.length){
+                this.$notify(this.$trans('You must choose at least one category.') , 'danger')
+                return;
+            }
+
             this.$http.post('admin/api/blog/post', {
                 id: this.post.id,
                 data: this.post,
@@ -53,7 +62,7 @@ const post = {
             }).catch((err) => {
                 this.$notify(err.data, 'danger');
             });
-        },
+        }
     },
 
     components: {

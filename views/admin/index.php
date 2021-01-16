@@ -8,14 +8,14 @@
             <h2 class="uk-h3 uk-margin-remove" v-if="!selected.length">{{ '{0} %count% Posts|{1} %count% Post|]1,Inf[ %count% Posts' | transChoice(count, {count:count}) }}</h2>
 
             <template v-else>
-                <h2 class="uk-h2 uk-margin-remove">{{ '{1} %count% Post selected|]1,Inf[ %count% Posts selected' | transChoice(selected.length, {count:selected.length}) }}</h2>
+                <h2 class="uk-h3 uk-margin-remove">{{ '{1} %count% Post selected|]1,Inf[ %count% Posts selected' | transChoice(selected.length, {count:selected.length}) }}</h2>
 
                 <div class="uk-margin-left" >
-                    <ul class="uk-subnav pk-subnav-icon">
-                        <li><a class="pk-icon-check pk-icon-hover" :uk-tooltip="'Publish' | trans" @click="status(2)"></a></li>
-                        <li><a class="pk-icon-block pk-icon-hover" :uk-tooltip="'Unpublish' | trans" @click="status(3)"></a></li>
-                        <li><a class="pk-icon-copy pk-icon-hover" :uk-tooltip="'Copy' | trans" @click="copy"></a></li>
-                        <li><a class="pk-icon-delete pk-icon-hover" :uk-tooltip="'Delete' | trans" @click="remove" v-confirm="'Delete Posts?'"></a></li>
+                    <ul class="uk-iconnav">
+                    <li><a uk-icon="icon:check;ratio:1" :uk-tooltip="'Publish' | trans" @click="status(3)"></a></li>
+                        <li><a uk-icon="icon:ban;ratio:1" :uk-tooltip="'Unpublish' | trans" @click="status(2)"></a></li>
+                        <li><a uk-icon="icon:copy;ratio:1" :uk-tooltip="'Copy' | trans" @click="copy"></a></li>
+                        <li><a uk-icon="icon:trash;ratio:1" :uk-tooltip="'Delete' | trans" @click="remove" v-confirm="'Delete Posts?'"></a></li>
                     </ul>
                 </div>
             </template>
@@ -40,6 +40,9 @@
                     <th class="pk-table-width-minimum"><input class="uk-checkbox" type="checkbox" v-check-all:selected="{ selector: 'input[name=id]' }" number></th>
                     <th class="pk-table-min-width-200" v-order:title="config.filter.order">{{ 'Title' | trans }}</th>
                     <th class="pk-table-width-100 uk-text-center">
+                        <input-filter :title="$trans('Categories')" :value.sync="config.filter.category" :options="categoryOptions" v-model="config.filter.category"></input-filter>
+                    </th>
+                    <th class="pk-table-width-100 uk-text-center">
                         <input-filter :title="$trans('Status')" :value.sync="config.filter.status" :options="statusOptions" v-model="config.filter.status"></input-filter>
                     </th>
                     <th class="pk-table-width-100">
@@ -55,6 +58,12 @@
                     <td><input class="uk-checkbox" type="checkbox" name="id" :value="post.id"></td>
                     <td>
                         <a :href="$url.route('admin/blog/post/edit', { id: post.id })">{{ post.title }}</a>
+                    </td>
+                    <td class="uk-text-center">
+                        <span v-if="post.categories.length > 1" class="uk-text-meta" style="cursor:help" :uk-tooltip="getCategoriesText(post.categories)">{{'Categories' | trans}}</span>
+                        <a v-else v-for="category in post.categories" :key="category.id" :href="$url.route('admin/blog/categories/edit', { id: category.id })" target="_blank">
+                            {{category.title}}
+                        </a>
                     </td>
                     <td class="uk-text-center">
                         <a :title="getStatusText(post)" :class="{

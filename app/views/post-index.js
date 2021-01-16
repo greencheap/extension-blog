@@ -39,13 +39,19 @@ var Post = {
     computed: {
 
         statusOptions() {
-            const options = _.map(this.$data.statuses, (status, id) => ({ text: status, value: id }));
+            const options = _.map(this.statuses, (status, id) => ({ text: status, value: id }));
+
+            return [{ label: this.$trans('Filter by'), options }];
+        },
+
+        categoryOptions() {
+            const options = _.map(this.categories, (category, id) => ({ text: category.title, value: category.id }));
 
             return [{ label: this.$trans('Filter by'), options }];
         },
 
         users() {
-            const options = _.map(this.$data.authors, author => ({ text: author.username, value: author.user_id }));
+            const options = _.map(this.authors, author => ({ text: author.username, value: author.user_id }));
 
             return [{ label: this.$trans('Filter by'), options }];
         },
@@ -117,6 +123,14 @@ var Post = {
         getStatusText(post) {
             return this.statuses[post.status];
         },
+
+        getCategoriesText(categories){
+            let data = [];
+            _.forEach(categories , (category) => {
+                data.push(category.title);
+            })
+            return _.join(data, ',');
+        }
 
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+use Doctrine\DBAL\Schema\Comparator;
+
 return [
     'enable' => function($app)
     {

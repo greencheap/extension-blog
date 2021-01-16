@@ -1,5 +1,5 @@
 <template>
-    <div class="uk-grid-small" uk-grid>
+    <div uk-grid>
         <div class="uk-width-expand@m">
             <div class="uk-margin">
                 <label class="uk-form-label">{{'Title' | trans}}</label>
@@ -18,11 +18,20 @@
             <div class="uk-margin">
                 <label class="uk-form-label">{{ 'Content' | trans }}</label>
                 <div class="uk-form-controls">
-                    <v-editor v-model="post.content" :options="{markdown : post.data.markdown , height: 400}" />
+                    <v-editor v-model="post.content" :options="{markdown : post.data.markdown , height: 700}" />
                 </div>
             </div>
         </div>
         <div class="uk-width-medium@m">
+            <div class="uk-margin" style="display:none">
+                <label class="uk-form-label">{{ 'Type' | trans }}</label>
+                <div class="uk-form-controls">
+                    <p v-for="(type , id) in getTypes" class="uk-margin-small" :key="id">
+                        <label><input type="radio" class="uk-radio uk-margin-small-right" :value="type.type" v-model="post.data.type"> <i :uk-icon="type.icon"></i> {{type.text}}</label>
+                    </p>
+                </div>
+            </div>
+
             <div class="uk-margin">
                 <label for="form-image" class="uk-form-label">{{ 'Image' | trans }}</label>
                 <div class="uk-form-controls">
@@ -48,9 +57,13 @@
                 </div>
             </div>
 
-            <div style="display:none" class="uk-margin uk-card uk-card-default uk-card-body uk-card-small">
+            <div class="uk-margin">
                 <label class="uk-form-label">{{ 'Categories' | trans }}</label>
-                <v-categories v-model="post.categories_id" :categoriesId="post.categories_id" :category-type="type" :required="true"/>
+                <div class="uk-form-controls">
+                    <p v-for="category in data.categories" class="uk-margin-small" :key="category.id">
+                        <label><input v-model="post.categories_id" class="uk-checkbox" type="checkbox" :value="category.id" number><span class="uk-margin-small-left">{{ category.title }}</span></label>
+                    </p>
+                </div>
             </div>
 
             <div class="uk-margin">
@@ -104,9 +117,26 @@ export default {
         priority: 0
     },
 
-    data(){
-        return {
-            type: 'blog'
+    computed:{
+        getTypes(){
+            return [
+                {
+                    'icon': 'file-text',
+                    'text': 'Article Content',
+                    'type': 'article'
+                },
+                {
+                    'icon': 'play-circle',
+                    'text': 'Video Content',
+                    'type': 'video'
+                },
+                
+                {
+                    'icon': 'album',
+                    'text': 'Gallery Content',
+                    'type': 'gallery'
+                }
+            ]
         }
     }
 }
