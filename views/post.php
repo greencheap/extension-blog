@@ -12,6 +12,23 @@
         <?= __('Written by %name% on %date%', ['%name%' => $this->escape($post->user->name), '%date%' => '<time datetime="'.$post->date->format(\DateTime::ATOM).'" v-cloak>{{ "'.$post->date->format(\DateTime::ATOM).'" | date("longDate") }}</time>' ]) ?>
     </p>
 
+    <ul class="uk-subnav">
+        <?php foreach($post->getCategories() as $category): ?>
+            <li><a href="<?= $view->url('@blog/category/id' , ['id' => $category['id']]) ?>"><?= $category['title'] ?></a></li>
+        <?php endforeach ?>
+    </ul>
+
     <div class="uk-margin"><?= $post->content ?></div>
+
+    <?= $view->render('system/comment:views/comment.php', [
+        'service' => [
+            'type' => 'blog',
+            'own_id' => $post->id,
+            'type_url' => [
+                'url' => '@blog/id',
+                'key' => 'id',
+            ]
+        ]
+    ]) ?>
 
 </article>

@@ -3,12 +3,10 @@
 use GreenCheap\Blog\Content\ReadmorePlugin;
 use GreenCheap\Blog\Event\PostListener;
 use GreenCheap\Blog\Event\RouteListener;
+use GreenCheap\Blog\Event\CategoryRouteListener;
 
 return [
     'name' => 'blog',
-
-    'main' => function ($app) {
-    },
 
     'autoload' => [
         'GreenCheap\\Blog\\' => 'src'
@@ -128,12 +126,14 @@ return [
             $app->subscribe(
                 new RouteListener,
                 new PostListener(),
+                new CategoryRouteListener(),
                 new ReadmorePlugin
             );
         },
 
         'view.scripts' => function ($event, $scripts) {
             $scripts->register('link-blog', 'blog:app/bundle/link-blog.js', '~panel-link');
+            $scripts->register('link-categories', 'blog:app/bundle/link-categories.js', '~panel-link');
             $scripts->register('post-meta', 'blog:app/bundle/post-meta.js', '~post-edit');
         },
 

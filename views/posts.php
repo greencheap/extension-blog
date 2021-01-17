@@ -1,4 +1,5 @@
 <?php $view->script('posts', 'blog:app/bundle/post.js', 'vue') ?>
+
 <?php foreach ($posts as $post) : ?>
     <article class="uk-article">
 
@@ -11,6 +12,12 @@
         <p class="uk-article-meta">
             <?= __('Written by %name% on %date%', ['%name%' => $this->escape($post->user->name), '%date%' => '<time datetime="'.$post->date->format(\DateTime::ATOM).'" v-cloak>{{ "'.$post->date->format(\DateTime::ATOM).'" | date("longDate") }}</time>' ]) ?>
         </p>
+
+        <ul class="uk-subnav">
+            <?php foreach($post->getCategories() as $category): ?>
+                <li><a href="<?= $view->url('@blog/category/id' , ['id' => $category['id']]) ?>"><?= $category['title'] ?></a></li>
+            <?php endforeach ?>
+        </ul>
 
         <div class="uk-margin"><?= $post->excerpt ?: $post->content ?></div>
 
@@ -36,7 +43,6 @@ $pageIndex = $page - 1;
 <?php if ($total > 1) : ?>
     <ul class="uk-pagination uk-flex-center">
 
-
         <?php for($i=1;$i<=$total;$i++): ?>
             <?php if ($i <= ($pageIndex+$range) && $i >= ($pageIndex-$range)): ?>
 
@@ -44,14 +50,14 @@ $pageIndex = $page - 1;
                     <li class="uk-active"><span><?=$i?></span></li>
                 <?php else: ?>
                     <li>
-                        <a href="<?= $view->url('@blog/page', ['page' => $i]) ?>"><?=$i?></a>
+                        <a href="<?= $view->url($page_link, array_merge(['page' => $i], $page_params)) ?>"><?=$i?></a>
                     </li>
                 <?php endif; ?>
 
             <?php elseif($i==1): ?>
 
                 <li>
-                    <a href="<?= $view->url('@blog/page', ['page' => 1]) ?>">1</a>
+                    <a href="<?= $view->url($page_link, array_merge(['page' => 1], $page_params)) ?>">1</a>
                 </li>
                 <li><span>...</span></li>
 
@@ -59,7 +65,7 @@ $pageIndex = $page - 1;
 
                 <li><span>...</span></li>
                 <li>
-                    <a href="<?= $view->url('@blog/page', ['page' => $total]) ?>"><?=$total?></a>
+                    <a href="<?= $view->url($page_link, array_merge(['page' => $total], $page_params)) ?>"><?=$total?></a>
                 </li>
 
             <?php endif; ?>

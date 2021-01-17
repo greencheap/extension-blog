@@ -7,7 +7,7 @@
                     {{ 'Posts View' | trans }}
                 </option>
                 <optgroup :label="'Posts' | trans">
-                    <option v-for="p in posts" :value="p | link">
+                    <option v-for="p in posts" :value="p | link" :key="p.id">
                         {{ p.title }}
                     </option>
                 </optgroup>

@@ -4,6 +4,8 @@ namespace GreenCheap\Blog\Controller;
 use GreenCheap\Application as App;
 use GreenCheap\Blog\Model\Post;
 use GreenCheap\Module\Module;
+use GreenCheap\Blog\Model\Categories;
+
 
 class SiteController
 {
@@ -26,11 +28,20 @@ class SiteController
      * @param int $page
      * @return array
      */
-    public function indexAction( int $page = 1 )
+    public function indexAction( int $page = 1 , $filter = [] )
     {
         $query = Post::query()->where(['status = :status', 'date < :date'], ['status' => Post::getStatus('STATUS_PUBLISHED'), 'date' => new \DateTime])->where(function ($query) {
             return $query->where('roles IS NULL')->whereInSet('roles', App::user()->roles, false, 'OR');
-        })->related('user');
+        });
+
+        $filter = array_merge(array_fill_keys(['category' , 'title' , 'description' , 'page_link' , 'page_params', 'category_data'], ''), $filter);
+        extract($filter, EXTR_SKIP);
+
+        if($category) {
+            $query->where(function ($query) use ($category) {
+                $query->whereInSet('categories_id', (int) $category);
+            });
+        }
 
         if (!$limit = $this->blog->config('posts.posts_per_page')) {
             $limit = 10;
@@ -40,16 +51,16 @@ class SiteController
         $total = ceil($count / $limit);
         $page = max(1, min($total, $page));
 
-        $query->offset(($page - 1) * $limit)->limit($limit)->orderBy('date', 'DESC');
-
+        $query->offset(($page - 1) * $limit)->limit($limit)->orderBy('date', 'DESC')->related('user');
+        
         foreach ($posts = $query->get() as $post) {
             $post->excerpt = App::content()->applyPlugins($post->excerpt, ['post' => $post, 'markdown' => $post->get('markdown')]);
             $post->content = App::content()->applyPlugins($post->content, ['post' => $post, 'markdown' => $post->get('markdown'), 'readmore' => true]);
         }
-
+        
         return [
             '$view' => [
-                'title' => __('Blog'),
+                'title' => $title ?: __('Blog'),
                 'name' => 'blog/posts.php',
                 'link:feed' => [
                     'rel' => 'alternate',
@@ -61,8 +72,43 @@ class SiteController
             'blog' => $this->blog,
             'posts' => $posts,
             'total' => $total,
-            'page' => $page
+            'page' => $page,
+            'page_link' => $page_link ?: '@blog/page',
+            'page_params' => $page_params ?: [],
+            'category_data' => (object) $category_data ?: []
         ];
+    }
+
+    /**
+     * @Route("/category/{id}", name="category/id")
+     * @param int $page
+     * @return array
+     */
+    public function categoryAction( int $id )
+    {
+        $request = App::request();
+        $page = intval($request->query->get('page')) ?: 1;
+        $query = Categories::query()->where(['status = :status', 'date < :date'], ['status' => Categories::getStatus('STATUS_PUBLISHED'), 'date' => new \DateTime])->where(function ($query) {
+            return $query->where('roles IS NULL')->whereInSet('roles', App::user()->roles, false, 'OR');
+        });
+
+        $query->where(['id = :id'], compact('id'));
+        
+        if(!$category = $query->related('user')->first()){
+            return App::abort(404, __('Not Found Category'));
+        }
+
+        if($category->excerpt){
+            $category->excerpt = App::content()->applyPlugins($category->excerpt, ['post' => $category, 'markdown' => $category->get('markdown')]);
+        }
+
+        return $this->indexAction($page, [
+            'category' => $category->id,
+            'title' => $category->title,
+            'page_link' => '@blog/category/id',
+            'page_params' => ['id' => $id],
+            'category_data' => $category
+        ]);
     }
 
     /**

@@ -10,6 +10,7 @@ module.exports = {
         'blog-settings': './app/views/blog-settings',
         'post': './app/views/post',
         'link-blog': './app/components/link-blog.vue',
+        'link-categories': './app/components/link-categories.vue',
         'post-meta': './app/components/post-meta.vue'
 
     },

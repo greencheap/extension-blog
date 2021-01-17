@@ -60,7 +60,7 @@
                         <a :href="$url.route('admin/blog/post/edit', { id: post.id })">{{ post.title }}</a>
                     </td>
                     <td class="uk-text-center">
-                        <span v-if="post.categories.length > 1" class="uk-text-meta" style="cursor:help" :uk-tooltip="getCategoriesText(post.categories)">{{'Categories' | trans}}</span>
+                        <span v-if="post.categories.length > 3" class="uk-text-meta" style="cursor:help" :uk-tooltip="getCategoriesText(post.categories)">{{'Categories' | trans}}</span>
                         <a v-else v-for="category in post.categories" :key="category.id" :href="$url.route('admin/blog/categories/edit', { id: category.id })" target="_blank">
                             {{category.title}}
                         </a>
