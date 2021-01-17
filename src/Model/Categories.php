@@ -91,7 +91,9 @@ class Categories implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
-        $data = [];
+        $data = [
+            'url' => App::url('@blog/category/id', ['id' => $this->id ?: 0], 'base')
+        ];
         return $this->toArray($data);
     }
 }
