@@ -78,14 +78,14 @@ class ApiPostController
         if (!$id || !$post = Post::find($id)) {
 
             if ($id) {
-                App::abort(404, __('Post not found.'));
+                App::jsonabort(404, __('Post not found.'));
             }
 
             $post = Post::create();
         }
 
         if (!$data['slug'] = App::filter($data['slug'] ?: $data['title'], 'slugify')) {
-            App::abort(400, __('Invalid slug.'));
+            App::jsonabort(400, __('Invalid slug.'));
         }
 
         // user without universal access is not allowed to assign posts to other users
@@ -95,7 +95,7 @@ class ApiPostController
 
         // user without universal access can only edit their own posts
         if(!App::user()->hasAccess('blog: manage all posts') && !App::user()->hasAccess('blog: manage own posts') && $post->user_id !== App::user()->id) {
-            App::abort(400, __('Access denied.'));
+            App::jsonabort(400, __('Access denied.'));
         }
 
         $post->save($data);
@@ -113,7 +113,7 @@ class ApiPostController
         if ($post = Post::find($id)) {
 
             if(!App::user()->hasAccess('blog: manage all posts') && !App::user()->hasAccess('blog: manage own posts') && $post->user_id !== App::user()->id) {
-                App::abort(400, __('Access denied.'));
+                App::jsonabort(400, __('Access denied.'));
             }
 
             $post->delete();

@@ -70,14 +70,14 @@ class ApiCategoriesController
         if (!$id || !$category = Categories::find($id)) {
 
             if ($id) {
-                return App::abort(404, __('Categories not found.'));
+                return App::jsonabort(404, __('Categories not found.'));
             }
 
             $category = Categories::create();
         }
 
         if (!$data['slug'] = App::filter($data['slug'] ?: $data['title'], 'slugify')) {
-            return App::abort(400, __('Invalid slug.'));
+            return App::jsonabort(400, __('Invalid slug.'));
         }
 
         // user without universal access is not allowed to assign posts to other users
@@ -87,7 +87,7 @@ class ApiCategoriesController
 
         // user without universal access can only edit their own posts
         if(!App::user()->hasAccess('blog: manage all posts') && !App::user()->hasAccess('blog: manage own posts') && $category->user_id !== App::user()->id) {
-            return App::abort(400, __('Access denied.'));
+            return App::jsonabort(400, __('Access denied.'));
         }
 
         $category->save($data);
@@ -105,7 +105,7 @@ class ApiCategoriesController
         if ($category = Categories::find($id)) {
 
             if(!App::user()->hasAccess('blog: manage all posts') && !App::user()->hasAccess('blog: manage own posts') && $category->user_id !== App::user()->id) {
-                App::abort(400, __('Access denied.'));
+                App::jsonabort(400, __('Access denied.'));
             }
 
             $category->delete();
