@@ -12,7 +12,7 @@
 
                 <div class="uk-margin-left" >
                     <ul class="uk-iconnav">
-                    <li><a uk-icon="icon:check;ratio:1" :uk-tooltip="'Publish' | trans" @click="status(3)"></a></li>
+                        <li><a uk-icon="icon:check;ratio:1" :uk-tooltip="'Publish' | trans" @click="status(3)"></a></li>
                         <li><a uk-icon="icon:ban;ratio:1" :uk-tooltip="'Unpublish' | trans" @click="status(2)"></a></li>
                         <li><a uk-icon="icon:copy;ratio:1" :uk-tooltip="'Copy' | trans" @click="copy"></a></li>
                         <li><a uk-icon="icon:trash;ratio:1" :uk-tooltip="'Delete' | trans" @click="remove" v-confirm="'Delete Posts?'"></a></li>
