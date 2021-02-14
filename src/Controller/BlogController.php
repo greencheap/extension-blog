@@ -6,6 +6,7 @@ use GreenCheap\Blog\Model\Post;
 use GreenCheap\System\Service\StatusModelService;
 use GreenCheap\User\Model\Role;
 use GreenCheap\User\Model\User;
+use JetBrains\PhpStorm\ArrayShape;
 
 /**
  * @Access(admin=true)
@@ -19,6 +20,7 @@ class BlogController
      * @param null $page
      * @return array[]
      */
+    #[ArrayShape(['$view' => "array", '$data' => "array"])]
     public function postAction($filter = null, $page = null): array
     {
 

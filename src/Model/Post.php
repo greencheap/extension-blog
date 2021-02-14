@@ -4,8 +4,8 @@ namespace GreenCheap\Blog\Model;
 use GreenCheap\Application as App;
 use GreenCheap\System\Model\DataModelTrait;
 use GreenCheap\System\Model\StatusModelTrait;
+use GreenCheap\System\Service\StatusModelService;
 use GreenCheap\User\Model\AccessModelTrait;
-use GreenCheap\Blog\Model\Categories;
 
 /**
  * Class Post
@@ -90,17 +90,16 @@ class Post implements \JsonSerializable
      */
     public function getCategories()
     {
-        $categories_id = $this->categories_id;
-
-        $db = App::db();
-        $query = $db->createQueryBuilder()
-        ->from('@blog_categories')
-        ->where('status = :status', ['status' => Categories::getStatus('STATUS_PUBLISHED')])
-        ->where(function($query)use($categories_id){
-            $query->whereIn('id' , $categories_id);
-        });
-        $categories = $query->get();
-        return $categories;
+        $categories = $this->categories_id;
+        if($categories){
+            $db = App::db();
+            return $db->createQueryBuilder()
+                ->from('@blog_categories')
+                ->where('status = ?' , [StatusModelService::getStatus('STATUS_PUBLISHED')])
+                ->whereIn('id', $categories)
+                ->get();
+        }
+        return false;
     }
 
     /**
