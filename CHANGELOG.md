@@ -2,13 +2,17 @@
 
 ### Fixed
 
-- The error when the comment module is active or inactive has been fixed.
+-   The error when the comment module is active or inactive has been fixed.
 
 ### Added
 
-- Multi Finder paired
-- Prettier
+-   Multi Finder paired
+-   Prettier
 
 ### Removed
 
-- Eslint
+-   Eslint
+
+### Updated
+
+-   All Javascript dependency updated
