@@ -4,3 +4,4 @@
 *.log
 /dist/
 .DS_Store
+/app/bundle/

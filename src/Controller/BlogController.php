@@ -1,4 +1,5 @@
 <?php
+
 namespace GreenCheap\Blog\Controller;
 
 use GreenCheap\Application as App;
@@ -27,10 +28,10 @@ class BlogController
         $db = App::db();
 
         $categories = $db->createQueryBuilder()
-        ->select(['id' , 'title'])
-        ->from('@blog_categories')
-        ->where('status = ?' , [StatusModelService::getStatus('STATUS_PUBLISHED')])
-        ->get();
+            ->select(['id', 'title'])
+            ->from('@blog_categories')
+            ->where('status = ?', [StatusModelService::getStatus('STATUS_PUBLISHED')])
+            ->get();
 
         return [
             '$view' => [
@@ -59,9 +60,9 @@ class BlogController
      */
     public function editAction($id = 0): array
     {
-        if( !$query = Post::where(compact('id'))->first() ){
-            if($id){
-                return App::abort(404 , __('Not Found Post'));
+        if (!$query = Post::where(compact('id'))->first()) {
+            if ($id) {
+                return App::abort(404, __('Not Found Post'));
             }
 
             $module = App::module('blog');
@@ -73,10 +74,11 @@ class BlogController
             ]);
 
             $query->set('markdown', $module->config('posts.markdown_enabled'));
+            $query->set('comment_status', $module->config('posts.comments_enabled'));
         }
 
         $user = App::user();
-        if(!$user->hasAccess('blog: manage all posts') && $query->user_id !== $user->id) {
+        if (!$user->hasAccess('blog: manage all posts') && $query->user_id !== $user->id) {
             App::abort(403, __('Insufficient User Rights.'));
         }
 
@@ -96,13 +98,13 @@ class BlogController
         $categories = App::db()->createQueryBuilder()
             ->select(['id', 'title'])
             ->from('@blog_categories')
-            ->where('status = ?' , [StatusModelService::getStatus('STATUS_PUBLISHED')])
-            ->orderBy('title' , 'asc')
+            ->where('status = ?', [StatusModelService::getStatus('STATUS_PUBLISHED')])
+            ->orderBy('title', 'asc')
             ->get();
 
         return [
             '$view' => [
-                'title' => $query->id ? __('Edit %title%' , ['%title%' => $query->title]) : __('New Post'),
+                'title' => $query->id ? __('Edit %title%', ['%title%' => $query->title]) : __('New Post'),
                 'name' => 'blog:views/admin/edit.php'
             ],
             '$data' => [

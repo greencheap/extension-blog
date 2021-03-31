@@ -1,4 +1,5 @@
 <?php
+
 namespace GreenCheap\Blog\Controller;
 
 use GreenCheap\Application as App;
@@ -48,9 +49,9 @@ class CategoriesController
     public function editAction(int $id = 0): array
     {
         $module = App::module('blog');
-        if(!$query = Categories::where(compact('id'))->first()){
-            if($id){
-                return App::abort(404 , __('Not Found Category'));
+        if (!$query = Categories::where(compact('id'))->first()) {
+            if ($id) {
+                return App::abort(404, __('Not Found Category'));
             }
 
             $query = Categories::create([
@@ -63,7 +64,7 @@ class CategoriesController
         }
 
         $user = App::user();
-        if(!$user->hasAccess('blog: manage all posts') && $query->user_id !== $user->id) {
+        if (!$user->hasAccess('blog: manage all posts') && $query->user_id !== $user->id) {
             App::abort(403, __('Insufficient User Rights.'));
         }
 
@@ -82,7 +83,7 @@ class CategoriesController
 
         return [
             '$view' => [
-                'title' => $query->id ? __('Edit %title%' , ['%title%' => $query->title]) : __('New Category'),
+                'title' => $query->id ? __('Edit %title%', ['%title%' => $query->title]) : __('New Category'),
                 'name' => 'blog:views/admin/categories-edit.php'
             ],
             '$data' => [
@@ -95,6 +96,5 @@ class CategoriesController
                 ]
             ]
         ];
-
     }
 }

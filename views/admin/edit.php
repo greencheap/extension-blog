@@ -1,4 +1,4 @@
-<?php $view->script('post-edit', 'blog:app/bundle/post-edit.js', ['vue', 'editor']) ?>
+<?php $view->script('post-edit', 'blog:app/bundle/post-edit.js', ['vue', 'editor', 'multi-finder']) ?>
 
 <form tag="form" id="app" @submit.prevent="submit" v-cloak>
     <div class="uk-flex uk-flex-middle uk-flex-between uk-flex-wrap">

@@ -35,7 +35,7 @@
             <div class="uk-margin">
                 <label for="form-image" class="uk-form-label">{{ 'Image' | trans }}</label>
                 <div class="uk-form-controls">
-                    <input-image-meta v-model="post.data.image" :image.sync="post.data.image" class="pk-image-max-height" />
+                    <v-multi-finder v-model="post.data.image" :image.sync="post.data.image" class="pk-image-max-height" />
                 </div>
             </div>
 
@@ -99,7 +99,7 @@
                         <label><input v-model="post.data.markdown" class="uk-checkbox" type="checkbox" value="1"><span class="uk-margin-small-left">{{ 'Enable Markdown' | trans }}</span></label>
                     </p>
                     <p class="uk-margin-small">
-                        <label><input v-model="post.comment_status" class="uk-checkbox" type="checkbox" value="1"><span class="uk-margin-small-left">{{ 'Enable Comments' | trans }}</span></label>
+                        <label><input v-model="post.data.comment_status" class="uk-checkbox" type="checkbox" value="1"><span class="uk-margin-small-left">{{ 'Enable Comments' | trans }}</span></label>
                     </p>
                 </div>
             </div>
