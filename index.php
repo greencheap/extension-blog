@@ -44,13 +44,6 @@ return [
         ]
     ],
 
-    "sitemaps" => [
-        'blog' => [
-            'name' => 'blog',
-            'generator' => 'GreenCheap\\Blog\\Sitemaps\\BlogSitemap'
-        ]
-    ],
-
     'nodes' => [
         'blog' => [
             'name' => '@blog',
@@ -141,7 +134,6 @@ return [
         'view.scripts' => function ($event, $scripts) {
             $scripts->register('link-blog', 'blog:app/bundle/link-blog.js', '~panel-link');
             $scripts->register('link-categories', 'blog:app/bundle/link-categories.js', '~panel-link');
-            $scripts->register('post-meta', 'blog:app/bundle/post-meta.js', '~post-edit');
         },
 
     ]

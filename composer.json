@@ -1,7 +1,7 @@
 {
     "name": "greencheap/blog",
     "type": "greencheap-extension",
-    "version": "2.0.4",
+    "version": "2.0.3",
     "title": "Blog",
     "description": "A Flexible Blog Structure You Can Write Your Own Articles",
     "license": "MIT",

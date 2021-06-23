@@ -44,16 +44,6 @@ return [
                 $table->addIndex(['slug'] , '@BLOG_CATEGORIES_SLUG');
             });
         }
-
-        $app['db']->insert('@blog_categories' , [
-            'title' => 'Uncategorized',
-            'slug' => 'uncategorized',
-            'status' => 3,
-            'date' => date('Y-m-d H:i:s'),
-            'user_id' => $app['user']->id,
-            'roles' => null,
-            'excerpt' => "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod\ntempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,\nquis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\nconsequat. Duis aute irure dolor in reprehenderit in voluptate velit esse\ncillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non\nproident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        ]);
     },
 
     'uninstall' => function($app)
@@ -61,10 +51,6 @@ return [
         $util = $app['db']->getUtility();
         if ($util->tableExists('@blog_post')) {
             $util->dropTable('@blog_post');
-        }
-
-        if($util->tableExists('@blog_categories')){
-            $util->dropTable('@blog_categories');
         }
     },
 

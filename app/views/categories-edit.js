@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import Section from "../components/categories-content.vue";
 
 const categories = {
@@ -14,7 +15,7 @@ const categories = {
         const sections = [];
         _.forIn(this.$options.components, (component, name) => {
             if (component.section) {
-                sections.push(_.extend({name, priority: 0}, component.section));
+                sections.push(_.extend({ name, priority: 0 }, component.section));
             }
         });
         this.$set(this, 'sections', _.sortBy(sections, 'priority'));
@@ -22,7 +23,7 @@ const categories = {
 
     mounted() {
         const vm = this;
-        this.tab = UIkit.tab('#tab', {connect: '#content'});
+        this.tab = UIkit.tab('#tab', { connect: '#content' });
 
         UIkit.util.on(this.tab.connects, 'show', (e, tab) => {
             if (tab != vm.tab) return;
@@ -45,10 +46,7 @@ const categories = {
             }).then((res) => {
                 const response = res.data;
                 if (!this.category.id) {
-                    window.history.replaceState({}, '', this.$url.route('admin/blog/categories/edit', {
-                        id: response.category.id,
-                        type: response.category.type
-                    }));
+                    window.history.replaceState({}, '', this.$url.route('admin/blog/categories/edit', { id: response.category.id, type: response.category.type }));
                 }
                 this.$set(this, 'category', response.category);
                 this.$notify(this.$trans('Saved'));
