@@ -124,6 +124,8 @@ class SiteController
         $locale = str_replace('_', '-', strtolower($locale));
 
         $site = App::module('system/site');
+        $siteUrl = str_replace("/","\/",App::url("", [], 0));
+
         $feed = App::feed()->create($type ?: $this->blog->config('feed.type'), [
             'title' => $site->config('title'),
             'link' => App::url('@blog', [], 0),
@@ -140,7 +142,7 @@ class SiteController
             return $query->where('roles IS NULL')->whereInSet('roles', App::user()->roles, false, 'OR');
         })->related('user')->limit($this->blog->config('feed.limit'))->orderBy('date', 'DESC')->get() as $post) {
             $url = App::url('@blog/id', ['id' => $post->id], 0);
-            $image = App::url()->getStatic($post->get('image.src'));
+            $image = preg_match("/https?:\/\/*/", $post->get('image.src')) ? $post->get('image.src') : App::url()->getStatic($post->get('image.src'), [], 0);
             $feed->addItem(
                 $feed->createItem([
                     'title' => $post->title,

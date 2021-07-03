@@ -1,3 +1,9 @@
+## 2.1.3
+
+### Updated
+
+- JsonArray to Json
+
 ## 2.0.3
 
 ### Fixed

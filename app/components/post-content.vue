@@ -64,6 +64,10 @@
                         <label><input v-model="post.categories_id" class="uk-checkbox" type="checkbox" :value="category.id" number><span class="uk-margin-small-left">{{ category.title }}</span></label>
                     </p>
                 </div>
+                <div v-if="!data.categories.length || !data.categories" class="uk-padding-small uk-text-center">
+                    <span>{{"No attached category found, please add a category first." | trans}}</span>
+                    <a :href="$url('admin/blog/categories/edit')">{{"Add a new category" | trans}}</a>
+                </div>
             </div>
 
             <div class="uk-margin">

@@ -1,7 +1,7 @@
 {
     "name": "greencheap/blog",
     "type": "greencheap-extension",
-    "version": "2.0.3",
+    "version": "2.1.3",
     "title": "Blog",
     "description": "A Flexible Blog Structure You Can Write Your Own Articles",
     "license": "MIT",
@@ -13,7 +13,7 @@
     "extra": {
         "image": "image.jpg",
         "scripts": "scripts.php",
-        "icon": "icon.svg"
+        "icon": "blog.svg"
     },
     "archive": {
         "exclude": ["node_modules", "!/app"]

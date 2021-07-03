@@ -15,7 +15,7 @@ return [
     'menu' => [
         'blog' => [
             'label' => 'Blog',
-            'icon' => 'blog:icon.svg',
+            'icon' => 'blog:blog.svg',
             'url' => '@blog/post',
             'active' => '@blog/post*',
             'access' => 'blog: manage own posts || blog: manage all posts || blog: manage comments || system: access settings',

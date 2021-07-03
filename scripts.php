@@ -18,7 +18,7 @@ return [
                 $table->addColumn('modified', 'datetime');
                 $table->addColumn('content', 'text', ['notnull' => false]);
                 $table->addColumn('excerpt', 'text', ['notnull' => false]);
-                $table->addColumn('data', 'json_array', ['notnull' => false]);
+                $table->addColumn('data', 'json', ['notnull' => false]);
                 $table->addColumn('roles', 'simple_array', ['notnull' => false]);
                 $table->setPrimaryKey(['id']);
                 $table->addUniqueIndex(['slug'], '@BLOG_POST_SLUG');
@@ -38,7 +38,7 @@ return [
                 $table->addColumn('date', 'datetime', ['notnull' => false]);
                 $table->addColumn('excerpt', 'text', ['notnull' => false]);
                 $table->addColumn('roles', 'simple_array', ['notnull' => false]);
-                $table->addColumn('data', 'json_array', ['notnull' => false]);
+                $table->addColumn('data', 'json', ['notnull' => false]);
                 $table->setPrimaryKey(['id']);
                 $table->addIndex(['title'] , '@BLOG_CATEGORIES_TITLE');
                 $table->addIndex(['slug'] , '@BLOG_CATEGORIES_SLUG');
@@ -51,6 +51,11 @@ return [
         $util = $app['db']->getUtility();
         if ($util->tableExists('@blog_post')) {
             $util->dropTable('@blog_post');
+        }
+
+        $util = $app['db']->getUtility();
+        if ($util->tableExists('@blog_categories')) {
+            $util->dropTable('@blog_categories');
         }
     },
 
@@ -73,7 +78,7 @@ return [
                     $table->addColumn('date', 'datetime', ['notnull' => false]);
                     $table->addColumn('excerpt', 'text', ['notnull' => false]);
                     $table->addColumn('roles', 'simple_array', ['notnull' => false]);
-                    $table->addColumn('data', 'json_array', ['notnull' => false]);
+                    $table->addColumn('data', 'json', ['notnull' => false]);
                     $table->setPrimaryKey(['id']);
                     $table->addIndex(['title'] , '@BLOG_CATEGORIES_TITLE');
                     $table->addIndex(['slug'] , '@BLOG_CATEGORIES_SLUG');
@@ -96,6 +101,11 @@ return [
                     'categories_id' => 1
                 ]);
             }
+        },
+
+        '2.1.4' => function($app)
+        {
+            // to json
         }
     ]
 ];
