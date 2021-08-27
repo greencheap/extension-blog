@@ -54,6 +54,13 @@ return [
         ]
     ],
 
+    "sitemaps" => [
+        "blog" => [
+            "name" => "blog",
+            "generator" => "GreenCheap\\Blog\\Sitemaps\\BlogSitemap",
+        ],
+    ],
+
     'routes' => [
         '/blog' => [
             'name' => '@blog',

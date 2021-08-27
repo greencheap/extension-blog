@@ -114,9 +114,17 @@ class Post implements \JsonSerializable
      * @param User|null $user
      * @return bool
      */
-    public function isAccessible(User $user = null)
+    public function isAccessible(User $user = null): bool
     {
         return $this->isPublished() && $this->hasAccess($user ?: App::user());
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return App::url('@blog/id', ['id' => $this->id ?: 0], 'base');
     }
 
     /**
@@ -125,7 +133,7 @@ class Post implements \JsonSerializable
     public function jsonSerialize()
     {
         $data = [
-            'url' => App::url('@blog/id', ['id' => $this->id ?: 0], 'base')
+            'url' => $this->getUrl()
         ];
 
         return $this->toArray($data);

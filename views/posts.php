@@ -31,6 +31,12 @@
     </article>
 <?php endforeach ?>
 
+<?php if(!$posts): ?>
+    <div class="uk-section-large uk-text-center">
+        <h1><?= __("Not found Posts") ?></h1>
+    </div>
+<?php endif ?>
+
 <?php
 
 $range     = 3;

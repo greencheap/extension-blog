@@ -5,15 +5,15 @@ use GreenCheap\Application as App;
 use GreenCheap\Blog\Model\Post;
 use GreenCheap\Module\Module;
 use GreenCheap\Blog\Model\Categories;
-
+use JetBrains\PhpStorm\ArrayShape;
 
 class SiteController
 {
     /**
      * @var Module
      */
-    protected $blog;
-    
+    protected Module $blog;
+
     /**
      * Constructor.
      */
@@ -26,9 +26,11 @@ class SiteController
      * @Route("/")
      * @Route("/page/{page}", name="page", requirements={"page" = "\d+"})
      * @param int $page
+     * @param array $filter
      * @return array
      */
-    public function indexAction( int $page = 1 , $filter = [] )
+    #[ArrayShape(['$view' => "array", 'blog' => "mixed", 'posts' => "mixed", 'total' => "float", 'page' => "mixed", 'page_link' => "mixed|string", 'page_params' => "array|mixed", 'category_data' => "array|object"])]
+    public function indexAction(int $page = 1 , array $filter = [] ): array
     {
         $query = Post::query()->where(['status = :status', 'date < :date'], ['status' => Post::getStatus('STATUS_PUBLISHED'), 'date' => new \DateTime])->where(function ($query) {
             return $query->where('roles IS NULL')->whereInSet('roles', App::user()->roles, false, 'OR');
@@ -52,12 +54,12 @@ class SiteController
         $page = max(1, min($total, $page));
 
         $query->offset(($page - 1) * $limit)->limit($limit)->orderBy('date', 'DESC')->related('user');
-        
+
         foreach ($posts = $query->get() as $post) {
             $post->excerpt = App::content()->applyPlugins($post->excerpt, ['post' => $post, 'markdown' => $post->get('markdown')]);
             $post->content = App::content()->applyPlugins($post->content, ['post' => $post, 'markdown' => $post->get('markdown'), 'readmore' => true]);
         }
-        
+
         return [
             '$view' => [
                 'title' => $title ?: __('Blog'),
@@ -93,7 +95,7 @@ class SiteController
         });
 
         $query->where(['id = :id'], compact('id'));
-        
+
         if(!$category = $query->related('user')->first()){
             return App::abort(404, __('Not Found Category'));
         }
@@ -180,7 +182,7 @@ class SiteController
         $post->content = App::content()->applyPlugins($post->content, ['post' => $post, 'markdown' => $post->get('markdown')]);
 
         $user = App::user();
-        
+
         $description = $post->get('meta.og:description');
         if (!$description) {
             $description = strip_tags($post->excerpt ?: $post->content);

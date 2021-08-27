@@ -5,7 +5,7 @@
         <div class="pk-width-sidebar">
             <div class="uk-panel">
                 <ul class="uk-nav uk-nav-default pk-nav-large" uk-switcher="connect: #tab-content">
-                    <li><a><i uk-icon="icon:menu;ratio:1.3" class="uk-margin-right"></i> {{ 'General' | trans }}</a></li>
+                    <li><a><i uk-icon="icon:menu;ratio:1" class="uk-margin-right"></i> {{ 'General' | trans }}</a></li>
                 </ul>
             </div>
         </div>
