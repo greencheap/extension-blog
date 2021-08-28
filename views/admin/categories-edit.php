@@ -2,9 +2,9 @@
 
 <form tag="form" id="app" @submit.prevent="submit" v-cloak>
     <div class="uk-flex uk-flex-middle uk-flex-between uk-flex-wrap">
-        <div class="">
-            <h2 class="uk-margin-remove" v-if="category.id">{{ 'Edit' }}</h2>
-            <h2 class="uk-margin-remove" v-else>{{ 'Add' }}</h2>
+        <div>
+            <v-title v-if="category.id" :title="'Edit' | trans"></v-title>
+            <v-title v-else :title="'Add' | trans"></v-title>
         </div>
         <div class="uk-margin">
             <a class="uk-button uk-button-text uk-margin-right" :href="$url.route('admin/blog/categories')">{{ category.id ? 'Close' : 'Cancel' | trans }}</a>

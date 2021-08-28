@@ -83,10 +83,10 @@ class SiteController
 
     /**
      * @Route("/category/{id}", name="category/id")
-     * @param int $page
-     * @return array
+     * @param int $id
+     * @return mixed
      */
-    public function categoryAction( int $id )
+    public function categoryAction( int $id ): mixed
     {
         $request = App::request();
         $page = intval($request->query->get('page')) ?: 1;
@@ -117,9 +117,9 @@ class SiteController
      * @Route("/feed" , defaults={"_maintenance"=true})
      * @Route("/feed/{type}" , defaults={"_maintenance"=true})
      * @param string $type
-     * @return
+     * @return mixed
      */
-    public function feedAction( string $type = '' )
+    public function feedAction( string $type = '' ): mixed
     {
         // fetch locale and convert to ISO-639 (en_US -> en-us)
         $locale = App::module('system')->config('site.locale');
