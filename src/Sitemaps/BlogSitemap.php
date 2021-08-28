@@ -64,9 +64,7 @@ class BlogSitemap implements SitemapInterface
             return $query->where('roles IS NULL')->whereInSet('roles', App::user()->roles, false, 'OR');
         });
 
-        if (!$limit = $this->blog->config('posts.posts_per_page')) {
-            $limit = 50;
-        }
+        $limit = Sitemaps::getPerLimit();
 
         $count = $query->count('id');
         $total = ceil($count / $limit);
