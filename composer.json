@@ -5,17 +5,27 @@
     "title": "Blog",
     "description": "A Flexible Blog Structure You Can Write Your Own Articles",
     "license": "MIT",
-    "authors": [{
-        "name": "GreenCheap",
-        "email": "support@greencheap.net",
-        "homepage": "https://greencheap.net"
-    }],
+    "authors": [
+        {
+            "name": "GreenCheap",
+            "email": "support@greencheap.net",
+            "homepage": "https://greencheap.net"
+        }
+    ],
     "extra": {
         "image": "image.jpg",
         "scripts": "scripts.php",
         "icon": "blog.svg"
     },
+    "appstore": {
+        "greencheap_version": "3",
+        "requirements": {},
+        "compatible": {}
+    },
     "archive": {
-        "exclude": ["node_modules", "!/app"]
+        "exclude": [
+            "node_modules",
+            "!/app"
+        ]
     }
 }
